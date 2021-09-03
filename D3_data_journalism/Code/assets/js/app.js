@@ -57,11 +57,13 @@ var circlesGroup = chartGroup.selectAll("circle")
     .data(data)
     .enter()
     .append("circle")
-    .attr("cx", (d,i) => xLinearScale(d.poverty))
+    .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
-    .attr("r", "15")
+    .attr("r", "20")
     .attr("fill", "blue")
     .classed("stateCircle", true)
+   
+    
 
 
 // State abbreviations
@@ -91,7 +93,7 @@ chartGroup.append("text")
     .attr("dy", "1em")
     .classed("aText", true)
     .attr("data-axis-name", "healthcare")
-    .text("Healthcare(%)");
+    .text("Lacks Healthcare(%)");
 
 // y labels
 chartGroup.append("text")
