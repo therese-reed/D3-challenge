@@ -60,31 +60,23 @@ var circlesGroup = chartGroup.selectAll("circle")
     .attr("cx", d => xLinearScale(d.poverty))
     .attr("cy", d => yLinearScale(d.healthcare))
     .attr("r", "20")
+    .attr("class",function(d){return "stateCircle"+d.abbr;})
     .attr("fill", "blue")
     .classed("stateCircle", true)
-   
-    
 
+   
 
 // State abbreviations
 chartGroup.selectAll("text")   
      .data(data)
     .enter()
     .append("text")
-    .attr("x", (d,i) => xLinearScale(d.poverty))
-    .attr("y", d => (yLinearScale(d.healthcare-0.30)))
+    .attr("dx", function(d) { return xLinearScale (d.poverty);})
+    .attr("dy", function(d) { return yLinearScale (d.healthcare);})
+    .attr("font-size","10")
     .classed("stateText", true)
     .text(d => d.abbr)
-    .on("mouseover", function(d) {
-        toolTip.show(d);
-        d3.select("." + d.abbr).style("stroke", "#323232");  
-        
-    })
-    .on("mouseout", function(d,i) {
-        toolTip.hide(d);
-        d3.select("." + d.abbr).style("stroke", "#E3E3E3"); 
-    });
-
+       
 // x labels
 chartGroup.append("text")
     .attr("transform", "rotate(-90)")
@@ -109,6 +101,18 @@ var toolTip = d3.tip()
     .html(function(d) {
         return (`${d.poverty}<br>Healthcare (%): ${d.healthcare}%<br>Poverty: ${d.poverty}`);
     });
+
+    chartGroup.call(toolTip);
+
+    // Step 8: Create event listeners to display and hide the tooltip
+    // ==============================
+    circlesGroup.on("click", function(data) {
+      toolTip.show(data, this);
+    })
+      // onmouseout event
+      .on("mouseout", function(data, index) {
+        toolTip.hide(data);
+      });
 
 var tooltip = d3.select("body")
     .append("div")
